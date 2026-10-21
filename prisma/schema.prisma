@@ -1,0 +1,21 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  naam      String
+  email     String
+  telefoon  String?
+  bericht   String?
+  page      String   @default("homepage")
+  purpose   String   @default("contact")
+  status    String   @default("nieuw") // nieuw | beantwoord | afgehandeld
+  notes     String?
+  createdAt DateTime @default(now())
+}
