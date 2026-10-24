@@ -11,7 +11,6 @@ export const site = {
   phoneHref: "tel:+32469169619",
   phoneIntl: "+32469169619",
   email: "bienonkelsteve@gmail.com",
-  orderUrl: "https://bie-nonkel-steve.unipage.eu/",
   mapsUrl: "https://www.google.com/maps/search/?api=1&query=Buurtspoorwegstraat+109,+8450+Bredene",
   mapsEmbed: "https://www.google.com/maps?q=Buurtspoorwegstraat+109,+8450+Bredene&output=embed",
 };

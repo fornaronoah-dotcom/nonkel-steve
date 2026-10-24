@@ -19,3 +19,97 @@ model ContactSubmission {
   notes     String?
   createdAt DateTime @default(now())
 }
+
+// ---------- Menu ----------
+
+model Category {
+  id       String    @id @default(cuid())
+  slug     String    @unique
+  name     String
+  intro    String    @default("")
+  sort     Int       @default(0)
+  active   Boolean   @default(true)
+  products Product[]
+}
+
+model Product {
+  id          String      @id @default(cuid())
+  categoryId  String
+  category    Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  price       Int // eurocent
+  sort        Int         @default(0)
+  active      Boolean     @default(true) // zichtbaar op de site
+  available   Boolean     @default(true) // false = tijdelijk uitverkocht
+  orderItems  OrderItem[]
+
+  @@index([categoryId, sort])
+}
+
+// ---------- Bestellen ----------
+
+model Settings {
+  id              Int       @id @default(1)
+  orderingEnabled Boolean   @default(true)
+  pauseMessage    String    @default("Online bestellen is momenteel gepauzeerd. Bel ons gerust!")
+  pickupEnabled   Boolean   @default(true)
+  deliveryEnabled Boolean   @default(true)
+  pickupLeadMin   Int       @default(20) // minimale bereidingstijd afhalen
+  deliveryLeadMin Int       @default(45) // minimale tijd tot levering
+  slotMinutes     Int       @default(15)
+  printerLastSeen DateTime?
+  printerMac      String?
+  updatedAt       DateTime  @updatedAt
+}
+
+model DeliveryZone {
+  id       String  @id @default(cuid())
+  postcode String  @unique
+  name     String
+  fee      Int // eurocent
+  minOrder Int // eurocent, subtotaal
+  active   Boolean @default(true)
+  orders   Order[]
+}
+
+model Order {
+  id           Int           @id @default(autoincrement()) // ook het bestelnummer
+  token        String        @unique // geheim, voor de bevestigingspagina
+  status       String        @default("open") // open | betaald | in_bereiding | klaar | afgerond | geannuleerd | mislukt
+  type         String // afhalen | leveren
+  scheduledFor DateTime
+  asap         Boolean       @default(false)
+  naam         String
+  telefoon     String
+  email        String
+  straat       String?
+  postcode     String?
+  gemeente     String?
+  zoneId       String?
+  zone         DeliveryZone? @relation(fields: [zoneId], references: [id], onDelete: SetNull)
+  opmerking    String?
+  subtotal     Int
+  deliveryFee  Int           @default(0)
+  total        Int
+  paymentId    String?       @unique
+  paidAt       DateTime?
+  printStatus  String? // null | wachtrij | bezig | geprint | fout
+  printedAt    DateTime?
+  createdAt    DateTime      @default(now())
+  items        OrderItem[]
+
+  @@index([status, createdAt])
+  @@index([printStatus])
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   Int
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  name      String // snapshot op moment van bestellen
+  unitPrice Int
+  quantity  Int
+}

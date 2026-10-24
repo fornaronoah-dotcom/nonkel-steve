@@ -12,6 +12,8 @@ export const metadata: Metadata = {
 
 const COOKIES = [
   { name: "cookie-consent", provider: site.name, purpose: "Onthoudt je cookiekeuze (localStorage).", duration: "Tot je ze wist", type: "Noodzakelijk" },
+  { name: "ns-cart", provider: site.name, purpose: "Onthoudt je winkelmand (localStorage).", duration: "Tot je bestelt of ze wist", type: "Noodzakelijk" },
+  { name: "ns_admin", provider: site.name, purpose: "Houdt de beheerder ingelogd (enkel /admin).", duration: "7 dagen", type: "Noodzakelijk" },
   { name: "_ga", provider: "Google Analytics", purpose: "Onderscheidt unieke bezoekers.", duration: "2 jaar", type: "Analytisch" },
   { name: "_ga_<ID>", provider: "Google Analytics", purpose: "Bewaart de sessiestatus.", duration: "2 jaar", type: "Analytisch" },
   { name: "Google Maps", provider: "Google", purpose: "Toont de routekaart en kan cookies plaatsen.", duration: "Variabel", type: "Functioneel / derde partij" },
@@ -19,7 +21,7 @@ const COOKIES = [
 
 export default function CookiePage() {
   return (
-    <LegalPage title="Cookiebeleid" updated="19 oktober 2026">
+    <LegalPage title="Cookiebeleid" updated="24 oktober 2026">
       <p>
         Cookies zijn kleine tekstbestanden die op je toestel worden opgeslagen wanneer je een website bezoekt. Volgens
         de Belgische wet betreffende de elektronische communicatie (art. 129) en de AVG plaatsen we enkel strikt

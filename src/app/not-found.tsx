@@ -12,7 +12,7 @@ export default function NotFound() {
       <p className="mt-4 text-lg text-ink/75">
         Net als de laatste frietjes van de dag. Ga terug naar de homepage of bestel meteen online.
       </p>
-      <CtaPair primary="order" secondary="menu" center className="mt-8" />
+      <CtaPair primary="order" secondary="call" center className="mt-8" />
     </main>
   );
 }

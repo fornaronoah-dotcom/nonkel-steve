@@ -18,7 +18,7 @@ export async function login(
   }
 
   await createSession();
-  redirect("/admin");
+  redirect("/admin/bestellingen");
 }
 
 export async function logout(): Promise<void> {

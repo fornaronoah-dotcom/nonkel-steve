@@ -7,7 +7,7 @@ type Variant = "primary" | "secondary" | "light";
 type Kind = "order" | "call" | "menu" | "contact" | "route";
 
 const CONFIG: Record<Kind, { label: string; href: string; icon: typeof Phone; external?: boolean }> = {
-  order: { label: "Bestel online", href: site.orderUrl, icon: ShoppingBag, external: true },
+  order: { label: "Bestel online", href: "/menu", icon: ShoppingBag },
   call: { label: `Bel ${site.phone}`, href: site.phoneHref, icon: Phone },
   menu: { label: "Bekijk het menu", href: "/menu", icon: UtensilsCrossed },
   contact: { label: "Stuur een bericht", href: "/contact", icon: Mail },

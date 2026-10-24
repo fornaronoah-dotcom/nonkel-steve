@@ -9,7 +9,8 @@ import { HoursTable } from "@/components/hours-table";
 import { MapEmbed } from "@/components/map-embed";
 import { ContactForm } from "@/components/contact-form";
 import { FaqJsonLd } from "@/components/json-ld";
-import { MENU, euro } from "@/lib/menu";
+import { getMenu } from "@/lib/menu";
+import { euro } from "@/lib/money";
 import { site } from "@/lib/site";
 import { delay } from "@/lib/reveal";
 
@@ -24,14 +25,12 @@ export const metadata: Metadata = {
 const SPOTLIGHT = [
   {
     name: "Nonkel Burger",
-    price: 9,
     image: "/images/nonkel-burger.webp",
     alt: "Nonkel Burger: rundvleesburger met sla, tomaat, rode ui en kaas op een sesambroodje",
     text: "De huisburger: sappig rundvlees, knapperige groenten en een smeuïge saus op een zacht broodje.",
   },
   {
     name: "Americaantje",
-    price: 12,
     image: "/images/americaantje.webp",
     alt: "Americaantje: friet met gesmolten cheddar, pulled pork en saus in een frietbakje",
     text: "Knapperige frietjes met een Amerikaanse twist: cheddar, pulled pork en BBQ-saus. Een maaltijd in één bakje.",
@@ -41,19 +40,16 @@ const SPOTLIGHT = [
 const FAVORITES = [
   {
     name: "Bicky burger",
-    price: 4.5,
     text: "De Belgische klassieker onder de burgers. Snel, lekker en altijd een goed idee.",
     tag: "Klassieker",
   },
   {
     name: "Stoofvlees",
-    price: 7.5,
     text: "Vlaams stoofvlees met een portie friet erbij: je avondmaal is geregeld.",
     tag: "Vlaamse klassieker",
   },
   {
     name: "Vol-au-vent",
-    price: 7.5,
     text: "Romige vol-au-vent, comfortfood zoals het hoort. Heerlijk met een grote friet.",
     tag: "Comfortfood",
   },
@@ -75,11 +71,11 @@ const STEPS = [
 const FAQ = [
   {
     q: "Kan ik bij Bie Nonkel Steve online bestellen?",
-    a: "Ja. Via onze online bestelpagina kies je je friet, snacks en sauzen en een afhaaluur. Je bestelling ligt dan warm klaar.",
+    a: "Ja. Kies op onze menupagina je friet, snacks en sauzen, kies afhalen of leveren en een tijdstip, en betaal veilig online met Bancontact, Payconiq of kaart.",
   },
   {
     q: "Leveren jullie aan huis?",
-    a: `Ja, we leveren ook aan huis. Bel ons op ${site.phone} voor een levering. Liever zelf afhalen? Bestel online en haal je bestelling op aan de Buurtspoorwegstraat 109 in Bredene.`,
+    a: "Ja. Kies bij het afrekenen 'Leveren' en je gemeente: je ziet meteen de leveringskost en het minimumbedrag. Liever zelf afhalen? Dat kan aan de Buurtspoorwegstraat 109 in Bredene.",
   },
   {
     q: "Wanneer is de frituur open?",
@@ -158,7 +154,15 @@ function OssenvetStamp({ id, className }: { id: string; className: string }) {
   );
 }
 
-export default function HomePage() {
+// Prijzen en menu komen uit de database (admin-wijzigingen verversen via revalidatePath).
+export const revalidate = 300;
+
+export default async function HomePage() {
+  const menu = await getMenu();
+  const products = menu.flatMap((c) => c.products);
+  /** Actuele prijs uit het menu; undefined als het product niet (meer) online staat. */
+  const priceOf = (name: string) => products.find((p) => p.name === name)?.price;
+
   return (
     <>
       <FaqJsonLd items={FAQ} />
@@ -205,7 +209,7 @@ export default function HomePage() {
               Verse friet, alle klassieke snacks, burgers en stoofvlees, gebakken in ossenvet zoals het hoort. Bestel
               online en haal warm af, of laat het aan huis leveren.
             </p>
-            <CtaPair primary="order" secondary="menu" dark center delayMs={450} className="mt-9 w-full sm:w-auto" />
+            <CtaPair primary="order" secondary="call" dark center delayMs={450} className="mt-9 w-full sm:w-auto" />
             <p className="reveal mt-5 text-sm text-cream/60" style={delay(150)}>
               {site.street}, {site.postalCode} {site.city} · Afhalen of leveren
             </p>
@@ -272,16 +276,18 @@ export default function HomePage() {
                     sizes="(min-width: 1152px) 540px, (min-width: 768px) 46vw, 100vw"
                     className="h-auto w-full transition-transform duration-700 ease-out group-hover:scale-105"
                   />
-                  <figcaption className="absolute bottom-3 right-3 rounded-full bg-coal/90 px-3.5 py-1 font-display text-lg text-gold backdrop-blur sm:bottom-5 sm:right-5 sm:px-4 sm:py-1.5 sm:text-2xl">
-                    {euro(item.price)}
-                  </figcaption>
+                  {priceOf(item.name) !== undefined && (
+                    <figcaption className="absolute bottom-3 right-3 rounded-full bg-coal/90 px-3.5 py-1 font-display text-lg text-gold backdrop-blur sm:bottom-5 sm:right-5 sm:px-4 sm:py-1.5 sm:text-2xl">
+                      {euro(priceOf(item.name)!)}
+                    </figcaption>
+                  )}
                 </figure>
                 <h3 className="font-display mt-7 text-3xl text-coal">{item.name}</h3>
                 <p className="mx-auto mt-3 max-w-md text-lg text-ink/80">{item.text}</p>
               </article>
             ))}
           </div>
-          <CtaPair primary="order" secondary="menu" center className="mt-14" />
+          <CtaPair primary="order" secondary="call" center className="mt-14" />
         </div>
       </section>
 
@@ -305,11 +311,13 @@ export default function HomePage() {
                 </span>
                 <h3 className="font-display mt-5 text-2xl text-coal">{f.name}</h3>
                 <p className="mt-3 flex-1 text-ink/75">{f.text}</p>
-                <p className="font-display mt-6 text-3xl text-bronze">{euro(f.price)}</p>
+                {priceOf(f.name) !== undefined && (
+                  <p className="font-display mt-6 text-3xl text-bronze">{euro(priceOf(f.name)!)}</p>
+                )}
               </article>
             ))}
           </div>
-          <CtaPair primary="order" secondary="menu" center className="mt-14" />
+          <CtaPair primary="order" secondary="call" center className="mt-14" />
         </div>
       </section>
 
@@ -350,18 +358,18 @@ export default function HomePage() {
             intro="Alle prijzen staan gewoon online. Kies een categorie en ontdek het volledige aanbod."
           />
           <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {MENU.map((c, idx) => {
-              const min = Math.min(...c.items.map((i) => i.price));
+            {menu.map((c, idx) => {
+              const min = Math.min(...c.products.map((p) => p.price));
               return (
                 <Link
                   key={c.id}
-                  href={`/menu#${c.id}`}
+                  href={`/menu#${c.slug}`}
                   className="reveal card-hover group checker flex flex-col items-center rounded-3xl bg-sand p-7 text-center hover:bg-gold"
                   style={delay((idx % 3) * 100)}
                 >
-                  <h3 className="font-display text-2xl text-coal">{c.title}</h3>
+                  <h3 className="font-display text-2xl text-coal">{c.name}</h3>
                   <p className="mt-1 text-sm text-ink/70">
-                    {c.items.length} items · vanaf {euro(min)}
+                    {c.products.length} items · vanaf {euro(min)}
                   </p>
                   <ArrowRight
                     className="mt-3 size-5 text-coal transition group-hover:translate-x-1"
@@ -371,7 +379,7 @@ export default function HomePage() {
               );
             })}
           </div>
-          <CtaPair primary="menu" secondary="order" center className="mt-14" />
+          <CtaPair primary="order" secondary="call" center className="mt-14" />
         </div>
       </section>
 

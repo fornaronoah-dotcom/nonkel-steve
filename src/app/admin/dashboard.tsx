@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import { logout } from "@/app/actions/auth";
 import { updateStatus, updateNotes, deleteSubmission } from "@/app/actions/admin";
 import { STATUSES, STATUS_LABELS } from "@/lib/status";
 
@@ -272,7 +271,7 @@ export function AdminDashboard({ submissions, dbError }: { submissions: Submissi
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="text-sm font-bold uppercase tracking-wider text-bronze">Bie Nonkel Steve · Admin</p>
-          <h1 className="font-display mt-1 text-4xl text-coal">Inzendingen</h1>
+          <h1 className="font-display mt-1 text-4xl text-coal">Berichten</h1>
           <p className="mt-1 text-ink/60">
             {filtered.length} van {submissions.length} · {nieuw} nieuw
           </p>
@@ -286,11 +285,6 @@ export function AdminDashboard({ submissions, dbError }: { submissions: Submissi
           >
             Exporteer CSV
           </button>
-          <form action={logout}>
-            <button type="submit" className="rounded-full bg-coal px-4 py-2 text-sm font-semibold text-white">
-              Uitloggen
-            </button>
-          </form>
         </div>
       </header>
 

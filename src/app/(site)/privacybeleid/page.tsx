@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <LegalPage title="Privacybeleid" updated="19 oktober 2026">
+    <LegalPage title="Privacybeleid" updated="24 oktober 2026">
       <p>
         {site.name} respecteert je privacy en verwerkt persoonsgegevens volgens de Algemene Verordening
         Gegevensbescherming (AVG/GDPR) en de Belgische wet van 30 juli 2018 betreffende de bescherming van natuurlijke
@@ -39,27 +39,32 @@ export default function PrivacyPage() {
           gegevens over het gebruik van de website (zie ons <Link href="/cookiebeleid">cookiebeleid</Link>).
         </li>
         <li>
-          <strong>Online bestellingen:</strong> verlopen via het platform van Unipage. Op die gegevens is het
-          privacybeleid van Unipage van toepassing.
+          <strong>Online bestellingen:</strong> naam, telefoonnummer, e-mailadres, (bij levering) je adres, je
+          bestelling en eventuele opmerking. Betalen gebeurt via Mollie; wij ontvangen geen kaart- of bankgegevens,
+          enkel de betaalstatus.
         </li>
       </ul>
 
       <h2>Waarom en op welke rechtsgrond?</h2>
       <ul>
         <li>Om je vraag te beantwoorden (toestemming en gerechtvaardigd belang, art. 6.1 a en f AVG).</li>
+        <li>Om je bestelling te bereiden, te leveren en je een bevestiging te sturen (uitvoering van de overeenkomst, art. 6.1 b AVG).</li>
+        <li>Om onze boekhouding te voeren (wettelijke verplichting, art. 6.1 c AVG).</li>
         <li>Om de website te verbeteren via statistieken (toestemming, art. 6.1 a AVG).</li>
       </ul>
 
       <h2>Hoe lang bewaren we je gegevens?</h2>
       <p>
         Berichten via het contactformulier bewaren we maximaal 12 maanden na het laatste contact, tenzij een langere
-        bewaring wettelijk verplicht is. Analytische gegevens worden na maximaal 14 maanden automatisch verwijderd.
+        bewaring wettelijk verplicht is. Bestelgegevens bewaren we zolang de boekhoudwetgeving dat vereist (tot 10 jaar).
+        Analytische gegevens worden na maximaal 14 maanden automatisch verwijderd.
       </p>
 
       <h2>Met wie delen we je gegevens?</h2>
       <p>
         We verkopen je gegevens nooit. We werken met verwerkers die ons helpen de website te laten draaien: Vercel
-        (hosting), een PostgreSQL-databaseprovider (opslag van formulierberichten), Resend (verzending van e-mails) en
+        (hosting), een PostgreSQL-databaseprovider (opslag van berichten en bestellingen), Mollie (online betalingen),
+        Resend (verzending van e-mails) en
         Google (Analytics en Maps, enkel na toestemming). Met hen zijn de nodige afspraken gemaakt. Wanneer gegevens
         buiten de Europese Economische Ruimte worden verwerkt, gebeurt dat op basis van passende waarborgen zoals het
         EU-VS Data Privacy Framework of standaardcontractbepalingen.

@@ -12,7 +12,7 @@ export default async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/admin/login", request.nextUrl));
   }
   if (isLogin && authed) {
-    return NextResponse.redirect(new URL("/admin", request.nextUrl));
+    return NextResponse.redirect(new URL("/admin/bestellingen", request.nextUrl));
   }
   return NextResponse.next();
 }

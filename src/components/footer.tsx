@@ -68,6 +68,9 @@ export function Footer() {
             <Link href="/cookiebeleid" className="hover:text-white">
               Cookiebeleid
             </Link>
+            <Link href="/voorwaarden" className="hover:text-white">
+              Voorwaarden
+            </Link>
             <CookieSettingsButton className="hover:text-white" />
           </div>
           <a href="https://ysmo.be/" target="_blank" rel="noopener" className="hover:text-white">

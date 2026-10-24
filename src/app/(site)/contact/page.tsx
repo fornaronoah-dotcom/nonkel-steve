@@ -87,7 +87,7 @@ export default function ContactPage() {
           <div className="reveal mx-auto mt-8 max-w-md text-lg">
             <HoursTable />
           </div>
-          <CtaPair primary="order" secondary="menu" center className="mt-8" />
+          <CtaPair primary="order" secondary="call" center className="mt-8" />
           <div className="mt-12">
             <MapEmbed />
           </div>

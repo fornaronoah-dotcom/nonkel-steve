@@ -3,11 +3,12 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, ShoppingBag, X } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { CtaButton } from "@/components/cta";
 import { site } from "@/lib/site";
 import { lockScroll } from "@/components/smooth-scroll";
+import { useCart } from "@/components/order/cart";
 
 // 'Home' staat bewust niet in de navigatie: het logo linkt naar home.
 const links = [
@@ -15,6 +16,24 @@ const links = [
   { href: "/#uren", label: "Openingsuren" },
   { href: "/contact", label: "Contact" },
 ];
+
+function CartButton({ className = "" }: { className?: string }) {
+  const { count, ready, setOpen } = useCart();
+  if (!ready || count === 0) return null;
+  return (
+    <button
+      type="button"
+      onClick={() => setOpen(true)}
+      className={`relative grid size-11 place-items-center rounded-full text-gold ring-1 ring-gold/60 transition hover:bg-gold hover:text-coal ${className}`}
+      aria-label={`Winkelmand openen, ${count} ${count === 1 ? "item" : "items"}`}
+    >
+      <ShoppingBag className="size-5" strokeWidth={2.2} aria-hidden="true" />
+      <span className="absolute -right-1 -top-1 grid min-w-5 place-items-center rounded-full bg-gold px-1 text-xs font-bold text-coal ring-2 ring-coal">
+        {count}
+      </span>
+    </button>
+  );
+}
 
 export function Nav() {
   const [open, setOpen] = useState(false);
@@ -60,11 +79,14 @@ export function Nav() {
               </Link>
             ))}
           </div>
-          <span className="md:hidden" aria-hidden="true" />
+          <div className="md:hidden">
+            <CartButton />
+          </div>
           <Link href="/" aria-label="Bie Nonkel Steve — naar home" className="justify-self-center">
             <Logo light />
           </Link>
-          <div className="hidden justify-end md:flex">
+          <div className="hidden items-center justify-end gap-3 md:flex">
+            <CartButton />
             <CtaButton kind="order" />
           </div>
           <button

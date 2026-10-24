@@ -31,7 +31,7 @@ export function LocalBusinessJsonLd() {
     })),
     potentialAction: {
       "@type": "OrderAction",
-      target: site.orderUrl,
+      target: `${SITE_URL}/menu`,
       deliveryMethod: [
         "http://purl.org/goodrelations/v1#DeliveryModePickUp",
         "http://purl.org/goodrelations/v1#DeliveryModeOwnFleet",
